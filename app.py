@@ -3,7 +3,7 @@ AI竞争力诊断问卷App - FastAPI后端
 """
 import os
 import json
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
@@ -146,14 +146,28 @@ QUESTIONS = [
 ]
 
 
-def build_analysis_prompt(answers: Dict[str, str]) -> str:
-    """构建用于AI分析的Prompt"""
+def build_analysis_prompt(answers: Dict[str, str]) -> Tuple[str, str]:
+    """构建用于AI分析的Prompt，返回system prompt和user prompt"""
     answers_json = json.dumps(answers, ensure_ascii=False, indent=2)
     
-    prompt = f"""# 角色与目标
-你是一位资深的AI战略顾问和课程助教，深刻理解构建者心态和AI协作五阶段框架。你的任务是根据一位学员的问卷回答，生成一份个性化的《AI时代竞争力诊断与成长路径图》。你的语言风格应富有洞察力、具有启发性，并与课程理念保持高度一致。你的目标是帮助学员定位自己，并为他们指明从用户到构建者，以及在协作阶梯上持续攀登的具体路径。
+    system_prompt = """你是一位资深的AI战略顾问和课程助教，深刻理解构建者心态和AI协作五阶段框架。
 
-# 核心理论框架 (必须严格遵循)
+你的工作方式：
+
+要有深度，有独立思考。在回答问题、做任务之前先想想，为什么要问这个问题？背后有没有什么隐藏的原因？因为很多时候可能交给你一个任务，是在一个更大的context下面，已经做了一些假设。你要思考这个假设可能是什么，有没有可能问的问题本身不是最优的，如果我们突破这个假设，可以问出更正确的问题，从更根本的角度得到启发。
+
+在你回答问题的时候，要先思考一下，你的答案的成功标准是什么。换言之，什么样的答案是好的。注意，不是说你要回答的问题，而是说你的回答的内容本身要满足什么标准，才算是很好地解决了需求。然后针对这些标准构思答案。
+
+你最终还是要给出一个答案的。但是我们是一个collaborative的关系。你的目标不是单纯的在一个回合的对话中给出一个确定的答案（这可能会逼着你一些假设不明的时候随意做出假设），而是合作，一步步找到问题的答案，甚至是问题实际更好的问法。换言之，你的任务不是follow指令，而是给出启发。
+
+语言风格要求：
+- 不要滥用bullet points，把它们局限在top level。尽量用自然语言自然段。
+- 不要使用任何引号，包括中文引号和英文引号。
+- 使用理性内敛的语言风格，用思考深度来表现专业，而不是堆砌宏大词藻。
+- 避免用文学性比喻。
+- 保持赋能和引导的语气，而非评判。"""
+    
+    user_prompt = f"""# 核心理论框架
 
 身份认同模型: 个体分为两种心态。用户 (User)：被动使用工具，期待现成的GUI解决方案，将问题归咎于工具。构建者 (Builder)：主动解决问题，将AI视为通过自然语言交互的计算接口，致力于解决长尾生产力问题，信奉通过构建来学习。
 
@@ -177,33 +191,37 @@ def build_analysis_prompt(answers: Dict[str, str]) -> str:
 
 请生成一份Markdown格式的报告，包含以下部分：
 
-1. 你的核心身份诊断：用户心智 vs. 构建者心智
+## 综合评分
 
-基于问题1-3的回答，精确判断学员的核心身份偏向。避免简单的二元划分，可以描述其混合状态。
+首先给出一个综合评分（0-100分），这个分数应该综合考虑学员在构建者心态和协作成熟度两个维度的表现。分数应该反映学员当前的整体水平，同时也要考虑其成长潜力。给出分数后，用一句话简要说明评分的依据。
 
-2. 你的协作成熟度定位：在五阶段的哪一级？
+## 你的核心身份诊断：用户心智 vs. 构建者心智
 
-基于问题4-6的回答，判断学员当前最匹配的协作阶段。指出其掌握的相应技能和面临的典型瓶颈。
+基于问题1-3的回答，精确判断学员的核心身份偏向。避免简单的二元划分，可以描述其混合状态。要有深度，能够洞察学员回答背后的思维模式和潜在假设。
 
-3. 你的进阶路径图：从划桨手到领航员
+## 你的协作成熟度定位：在五阶段的哪一级？
 
-结合身份和阶段的诊断，提供1-2个具体、可执行的、与课程理念紧密结合的进阶建议。
+基于问题4-6的回答，判断学员当前最匹配的协作阶段。指出其掌握的相应技能和面临的典型瓶颈。要思考学员回答背后的深层逻辑，而不仅仅是表面的选择。
 
-4. 最后的启发性问题
+## 你的进阶路径图：从划桨手到领航员
 
-在报告结尾，提出一个能激发学员开启构建者旅程的开放性问题。
+结合身份和阶段的诊断，提供1-2个具体、可执行的、与课程理念紧密结合的进阶建议。这些建议应该能够突破学员当前的假设，从更根本的角度给出启发。
+
+## 最后的启发性问题
+
+在报告结尾，提出一个能激发学员开启构建者旅程的开放性问题。这个问题应该能够引导学员思考更深层的问题。
 
 # 规则
 
 报告中必须自然地使用课程中的关键词（如构建者、上下文策展、上下文架构师、分而治之、长尾生产力问题等）。
 
-保持赋能和引导的语气，而非评判。
+不要使用任何引号，包括中文引号和英文引号。
 
-总字数控制在800字以内。
+总字数控制在1000字以内。
 
 请直接生成报告内容，不需要额外的说明文字。"""
     
-    return prompt
+    return system_prompt, user_prompt
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -227,7 +245,7 @@ async def analyze_answers(answers: Dict[str, str]):
             raise HTTPException(status_code=400, detail="答案不完整，请回答所有问题")
         
         # 构建Prompt
-        prompt = build_analysis_prompt(answers)
+        system_prompt, user_prompt = build_analysis_prompt(answers)
         
         # 调用AI Builder API
         token = get_ai_builder_token()
@@ -242,12 +260,16 @@ async def analyze_answers(answers: Dict[str, str]):
             "model": AI_BUILDER_MODEL,
             "messages": [
                 {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
                     "role": "user",
-                    "content": prompt
+                    "content": user_prompt
                 }
             ],
             "temperature": 0.7,
-            "max_tokens": 2000
+            "max_tokens": 2500
         }
         
         async with httpx.AsyncClient(timeout=60.0) as client:
