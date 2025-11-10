@@ -197,7 +197,7 @@ First provide an overall score (0-100 points). This score should comprehensively
 
 ## Your Core Identity Diagnosis: User Mindset vs. Builder Mindset
 
-Based on responses to questions 1-3, precisely determine the student's core identity orientation. Avoid simple binary divisions; describe mixed states. Be deep, able to洞察 the thinking patterns and underlying assumptions behind the student's responses.
+Based on responses to questions 1-3, precisely determine the student's core identity orientation. Avoid simple binary divisions; describe mixed states. Be deep, able to discern the thinking patterns and underlying assumptions behind the student's responses.
 
 ## Your Collaboration Maturity Positioning: Which Stage?
 
