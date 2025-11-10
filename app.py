@@ -45,7 +45,7 @@ def get_ai_builder_token() -> str:
 QUESTIONS = [
     {
         "id": "Q1",
-        "text": "当一个重复性的手动任务（例如，每周整理数据并发送邮件）让你感到厌烦时，你脑中首先出现的想法更接近于？",
+        "text": "When a repetitive manual task (e.g., weekly data organization and email sending) annoys you, what comes to mind first?",
         "options": {
             "A": "Focus on manual completion with better concentration",
             "B": "Search for an existing paid tool to solve it permanently",
@@ -55,7 +55,7 @@ QUESTIONS = [
     },
     {
         "id": "Q2",
-        "text": "当你尝试使用AI辅助工作，但它的产出不准确甚至胡说八道时，你的反应是？",
+        "text": "When you try to use AI to assist your work, but its output is inaccurate or even nonsensical, your reaction is:",
         "options": {
             "A": "Confirm AI is unreliable and use it cautiously in serious work",
             "B": "Treat it like an intern, adjust instructions and try to teach it",
@@ -65,7 +65,7 @@ QUESTIONS = [
     },
     {
         "id": "Q3",
-        "text": "公司引入了一个全新的内部知识库，但信息繁杂。你希望如何利用它？",
+        "text": "Your company introduces a new internal knowledge base, but the information is complex. How would you like to utilize it?",
         "options": {
             "A": "Wait for IT to provide a search interface or navigation",
             "B": "Read through everything myself to build a mental index",
@@ -75,7 +75,7 @@ QUESTIONS = [
     },
     {
         "id": "Q4",
-        "text": "你需要AI帮你写一段用于数据分析的代码。在与AI的交互中，哪种情况最符合你的现状？",
+        "text": "You need AI to help write code for data analysis. Which scenario best matches your current interaction with AI?",
         "options": {
             "A": "Tell AI the goal directly and see what it produces",
             "B": "Provide the data schema first, then specify analysis requirements",
@@ -85,7 +85,7 @@ QUESTIONS = [
     },
     {
         "id": "Q5",
-        "text": "你需要调研十个竞争对手的最新动态并形成报告。你会如何借助AI？",
+        "text": "You need to research ten competitors' latest developments and create a report. How would you leverage AI?",
         "options": {
             "A": "Ask AI one broad question to research all ten companies",
             "B": "Have AI list companies, then research each separately and summarize myself",
@@ -95,7 +95,7 @@ QUESTIONS = [
     },
     {
         "id": "Q6",
-        "text": "对你而言，AI原生的工作环境意味着什么？",
+        "text": "What does an AI-native work environment mean to you?",
         "options": {
             "A": "AI assistant buttons embedded in all my software",
             "B": "Skillfully switching between different AI tools for complex tasks",
@@ -105,7 +105,7 @@ QUESTIONS = [
     },
     {
         "id": "Q7",
-        "text": "忘掉旧经验对你来说，更像是一种？",
+        "text": "Forgetting old experience feels more like:",
         "options": {
             "A": "Threat",
             "B": "Challenge",
@@ -115,7 +115,7 @@ QUESTIONS = [
     },
     {
         "id": "Q8",
-        "text": "你认为未来最有价值的技能是？",
+        "text": "What skill do you think will be most valuable in the future?",
         "options": {
             "A": "Mastering a specific AI tool",
             "B": "Ability to quickly learn any new tool",
@@ -125,7 +125,7 @@ QUESTIONS = [
     },
     {
         "id": "Q9",
-        "text": "想象你被指派领导一个重要但定义模糊的项目，例如利用AI提升客户满意度。在项目启动的第一周，你的工作重心会是什么？",
+        "text": "Imagine you're assigned to lead an important but vaguely defined project, such as using AI to improve customer satisfaction. In the first week, what would be your focus?",
         "options": {
             "A": "Start experimenting immediately with mainstream AI tools to find quick wins",
             "B": "Break down the goal into detailed technical tasks with a comprehensive timeline",
@@ -135,7 +135,7 @@ QUESTIONS = [
     },
     {
         "id": "Q10",
-        "text": "当您想象自己已真正掌握与AI的协作时，以下哪种情景最能代表您职业生涯中的终极胜利？",
+        "text": "When you imagine truly mastering AI collaboration, which scenario best represents your ultimate career victory?",
         "options": {
             "A": "Maximum efficiency: completing days of work in minutes, becoming the undisputed efficiency champion",
             "B": "Extended intelligence: AI as my co-pilot for brainstorming and discovering hidden connections",
@@ -240,9 +240,9 @@ async def get_questions():
 async def analyze_answers(answers: Dict[str, str]):
     """分析用户答案并生成报告"""
     try:
-        # 验证答案格式
+        # Validate answer format
         if not answers or len(answers) < 9:
-            raise HTTPException(status_code=400, detail="答案不完整，请回答所有问题")
+            raise HTTPException(status_code=400, detail="Incomplete answers. Please answer all questions.")
         
         # 构建Prompt
         system_prompt, user_prompt = build_analysis_prompt(answers)

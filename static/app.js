@@ -1,17 +1,17 @@
-// 问卷应用主逻辑
+// Survey application main logic
 let questions = [];
 let currentQuestionIndex = 0;
 let answers = {};
 
-// 初始化应用
+// Initialize application
 async function init() {
     try {
-        // 加载问题列表
+        // Load question list
         const response = await fetch('/api/questions');
         const data = await response.json();
         questions = data.questions;
         
-        // 初始化答案对象
+        // Initialize answer object
         questions.forEach(q => {
             if (q.is_open) {
                 answers[q.id] = '';
@@ -20,15 +20,15 @@ async function init() {
             }
         });
         
-        // 显示第一个问题
+        // Show first question
         showQuestion(0);
     } catch (error) {
-        console.error('初始化失败:', error);
-        alert('加载问卷失败，请刷新页面重试');
+        console.error('Initialization failed:', error);
+        alert('Failed to load survey. Please refresh the page and try again.');
     }
 }
 
-// 显示问题
+// Show question
 function showQuestion(index) {
     if (index < 0 || index >= questions.length) return;
     
@@ -36,18 +36,18 @@ function showQuestion(index) {
     const question = questions[index];
     const container = document.getElementById('question-container');
     
-    // 更新进度条
+    // Update progress bar
     const progress = ((index + 1) / questions.length) * 100;
     document.getElementById('progress-fill').style.width = progress + '%';
     
-    // 构建问题HTML
+    // Build question HTML
     let html = `
-        <div class="question-number">问题 ${index + 1} / ${questions.length}</div>
+        <div class="question-number">Question ${index + 1} / ${questions.length}</div>
         <div class="question-text">${question.text}</div>
     `;
     
     if (question.is_open) {
-        // 开放性问题
+        // Open-ended question
         html += `
             <div class="option-item">
                 <label class="option-label">
@@ -55,14 +55,14 @@ function showQuestion(index) {
                         id="answer-${question.id}" 
                         class="option-text" 
                         rows="4" 
-                        placeholder="请在此输入你的回答..."
+                        placeholder="Please enter your answer here..."
                         style="width: 100%; padding: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 1rem; resize: vertical;"
                     >${answers[question.id] || ''}</textarea>
                 </label>
             </div>
         `;
     } else {
-        // 选择题
+        // Multiple choice question
         html += '<ul class="options-list">';
         Object.entries(question.options).forEach(([key, value]) => {
             const isSelected = answers[question.id] === key;
@@ -86,32 +86,32 @@ function showQuestion(index) {
     
     container.innerHTML = html;
     
-    // 如果是开放性问题，绑定输入事件
+    // If open-ended question, bind input event
     if (question.is_open) {
         const textarea = document.getElementById(`answer-${question.id}`);
         if (textarea) {
             textarea.addEventListener('input', (e) => {
                 answers[question.id] = e.target.value;
             });
-            // 恢复之前的值
+            // Restore previous value
             if (answers[question.id]) {
                 textarea.value = answers[question.id];
             }
         }
     }
     
-    // 更新按钮状态
+    // Update button status
     updateButtons();
     
-    // 滚动到顶部
+    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 选择选项
+// Select option
 function selectOption(questionId, option) {
     answers[questionId] = option;
     
-    // 更新UI选中状态
+    // Update UI selected state
     const labels = document.querySelectorAll(`input[name="question-${questionId}"]`);
     labels.forEach(label => {
         const labelElement = label.closest('.option-label');
@@ -125,16 +125,16 @@ function selectOption(questionId, option) {
     updateButtons();
 }
 
-// 更新按钮状态
+// Update button status
 function updateButtons() {
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const submitBtn = document.getElementById('submit-btn');
     
-    // 上一题按钮
+    // Previous button
     prevBtn.style.display = currentQuestionIndex > 0 ? 'block' : 'none';
     
-    // 下一题/提交按钮
+    // Next/Submit button
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
     const currentAnswer = answers[questions[currentQuestionIndex].id];
     const hasAnswer = currentAnswer !== null && currentAnswer !== '';
@@ -147,24 +147,24 @@ function updateButtons() {
         submitBtn.style.display = 'none';
     }
     
-    // 禁用下一题按钮如果没有答案
+    // Disable next button if no answer
     if (!isLastQuestion) {
         nextBtn.disabled = !hasAnswer;
     }
 }
 
-// 上一题
+// Previous question
 function prevQuestion() {
     if (currentQuestionIndex > 0) {
         showQuestion(currentQuestionIndex - 1);
     }
 }
 
-// 下一题
+// Next question
 function nextQuestion() {
     const currentAnswer = answers[questions[currentQuestionIndex].id];
     if (currentAnswer === null || currentAnswer === '') {
-        alert('请先回答当前问题');
+        alert('Please answer the current question first');
         return;
     }
     
@@ -173,29 +173,28 @@ function nextQuestion() {
     }
 }
 
-// 提交问卷
 async function submitSurvey() {
-    // 验证所有问题都已回答
+    // Validate all questions are answered
     const unanswered = questions.filter(q => {
         const answer = answers[q.id];
         return answer === null || answer === '';
     });
     
     if (unanswered.length > 0) {
-        alert('请回答所有问题后再提交');
+        alert('Please answer all questions before submitting');
         return;
     }
     
-    // 隐藏问卷区域，显示加载中
+    // Hide survey section, show loading
     document.getElementById('survey-section').style.display = 'none';
     document.getElementById('loading-section').style.display = 'block';
     
-    // 启动假的进度条动画
+    // Start fake progress bar animation
     const progressBar = document.getElementById('loading-progress-fill');
     let progress = 0;
-    const targetProgress = 95; // 目标进度95%
-    const duration = 30000; // 30秒
-    const interval = 50; // 每50ms更新一次
+    const targetProgress = 95; // Target 95%
+    const duration = 30000; // 30 seconds
+    const interval = 50; // Update every 50ms
     const increment = (targetProgress / duration) * interval;
     
     const progressInterval = setInterval(() => {
@@ -208,7 +207,7 @@ async function submitSurvey() {
     }, interval);
     
     try {
-        // 提交答案到后端
+        // Submit answers to backend
         const response = await fetch('/api/analyze', {
             method: 'POST',
             headers: {
@@ -219,46 +218,46 @@ async function submitSurvey() {
         
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.detail || '生成报告失败');
+            throw new Error(error.detail || 'Failed to generate report');
         }
         
         const data = await response.json();
         const reportContent = data.report;
         
-        // 确保进度条到达100%
+        // Ensure progress bar reaches 100%
         clearInterval(progressInterval);
         progressBar.style.width = '100%';
         
-        // 稍微延迟一下再显示报告，让用户看到100%
+        // Slight delay before showing report so user sees 100%
         setTimeout(() => {
             showReport(reportContent);
         }, 300);
         
     } catch (error) {
-        console.error('提交失败:', error);
+        console.error('Submission failed:', error);
         clearInterval(progressInterval);
-        alert('生成报告失败: ' + error.message);
-        // 恢复问卷显示
+        alert('Failed to generate report: ' + error.message);
+        // Restore survey display
         document.getElementById('survey-section').style.display = 'block';
         document.getElementById('loading-section').style.display = 'none';
     }
 }
 
-// 显示报告
+// Show report
 function showReport(markdownContent) {
-    // 隐藏加载中，显示报告
+    // Hide loading, show report
     document.getElementById('loading-section').style.display = 'none';
     document.getElementById('report-section').style.display = 'block';
     
-    // 将Markdown转换为HTML
+    // Convert Markdown to HTML
     const htmlContent = marked.parse(markdownContent);
     document.getElementById('report-content').innerHTML = htmlContent;
     
-    // 滚动到报告区域
+    // Scroll to report section
     document.getElementById('report-section').scrollIntoView({ behavior: 'smooth' });
 }
 
-// 绑定事件监听器
+// Bind event listeners
 document.addEventListener('DOMContentLoaded', () => {
     init();
     

@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI竞争力诊断问卷</title>
+    <title>AI Readiness Assessment</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
-        <!-- 头部 -->
+        <!-- Header -->
         <header class="header">
-            <h1>AI时代竞争力诊断</h1>
-            <p class="subtitle">发现你的构建者潜力，找到你的协作阶段</p>
+            <h1>AI Readiness Assessment</h1>
+            <p class="subtitle">Discover your builder potential and identify your collaboration stage</p>
         </header>
 
-        <!-- 问卷区域 -->
+        <!-- Survey Section -->
         <div id="survey-section" class="survey-section">
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
             </div>
             <div id="question-container" class="question-container">
-                <!-- 问题将通过JavaScript动态加载 -->
+                <!-- Questions will be loaded dynamically via JavaScript -->
             </div>
             <div class="button-group">
-                <button id="next-btn" class="btn btn-primary">下一题</button>
-                <button id="submit-btn" class="btn btn-primary" style="display: none;">提交问卷</button>
-                <button id="prev-btn" class="btn btn-secondary" style="display: none;">上一题</button>
+                <button id="next-btn" class="btn btn-primary">Next</button>
+                <button id="submit-btn" class="btn btn-primary" style="display: none;">Submit</button>
+                <button id="prev-btn" class="btn btn-secondary" style="display: none;">Previous</button>
             </div>
         </div>
 
-        <!-- 加载中 -->
+        <!-- Loading Section -->
         <div id="loading-section" class="loading-section" style="display: none;">
             <div class="loading-progress-container">
                 <div class="loading-progress-bar">
                     <div id="loading-progress-fill" class="loading-progress-fill"></div>
                 </div>
-                <p class="loading-text">正在生成你的个性化诊断报告...</p>
-                <p class="loading-note">我们使用的是深思熟虑的AI模型，需要大约半分钟的时间来为你生成精准的分析报告</p>
+                <p class="loading-text">Generating your personalized assessment report...</p>
+                <p class="loading-note">We use a thoughtful AI model that takes about half a minute to generate an accurate analysis report for you</p>
             </div>
         </div>
 
-        <!-- 报告区域 -->
+        <!-- Report Section -->
         <div id="report-section" class="report-section" style="display: none;">
             <div id="report-content" class="report-content">
-                <!-- 报告内容将通过JavaScript动态加载 -->
+                <!-- Report content will be loaded dynamically -->
             </div>
             <div class="cta-section">
-                <h2>准备好开始你的构建者之旅了吗？</h2>
-                <p>深入学习AI协作的核心技能，从用户成长为构建者</p>
-                <a href="https://www.superlinear.academy/ai-builders" target="_blank" class="btn btn-cta">了解课程详情</a>
+                <h2>Ready to start your builder journey?</h2>
+                <p>Deep dive into AI collaboration skills and grow from user to builder</p>
+                <a href="https://www.superlinear.academy/ai-builders" target="_blank" class="btn btn-cta">Learn More</a>
             </div>
         </div>
     </div>
 
-    <!-- Markdown渲染库 -->
+    <!-- Markdown rendering library -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/static/app.js"></script>
 </body>
