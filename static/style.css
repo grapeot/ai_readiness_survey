@@ -165,8 +165,8 @@ body {
 /* 按钮组 */
 .button-group {
     display: flex;
-    gap: 1rem;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-top: 2rem;
 }
 
@@ -179,12 +179,13 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: inherit;
+    width: 100%;
 }
 
 .btn-primary {
     background: var(--primary-color);
     color: white;
-    flex: 1;
+    order: 1;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -202,6 +203,7 @@ body {
     background: var(--bg-light);
     color: var(--text-color);
     border: 2px solid var(--border-color);
+    order: 2;
 }
 
 .btn-secondary:hover {
@@ -369,14 +371,6 @@ body {
 
     .question-text {
         font-size: 1.1rem;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
     }
 }
 
