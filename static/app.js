@@ -193,7 +193,7 @@ async function submitSurvey() {
     const progressBar = document.getElementById('loading-progress-fill');
     let progress = 0;
     const targetProgress = 95; // Target 95%
-    const duration = 60000; // 60 seconds
+    const duration = 20000; // 20 seconds
     const interval = 50; // Update every 50ms
     const increment = (targetProgress / duration) * interval;
     

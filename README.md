@@ -14,7 +14,7 @@
 
 - **后端**: Python 3.12+, FastAPI
 - **前端**: HTML5, CSS3, Vanilla JavaScript
-- **LLM**: AI Builder API (gpt-5模型)
+- **LLM**: AI Builder API (grok-4-fast模型)
 - **Markdown渲染**: marked.js
 
 ## 快速开始

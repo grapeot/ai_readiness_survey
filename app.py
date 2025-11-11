@@ -30,7 +30,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # AI Builder API配置
 AI_BUILDER_BASE_URL = "https://www.ai-builders.com/resources/students-backend"
-AI_BUILDER_MODEL = "gpt-5"
+AI_BUILDER_MODEL = "grok-4-fast"
 
 
 def get_ai_builder_token() -> str:
