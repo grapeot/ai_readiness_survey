@@ -265,4 +265,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('next-btn').addEventListener('click', nextQuestion);
     document.getElementById('submit-btn').addEventListener('click', submitSurvey);
 });
-

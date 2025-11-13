@@ -148,7 +148,22 @@ QUESTIONS = [
 
 def build_analysis_prompt(answers: Dict[str, str]) -> Tuple[str, str]:
     """Build prompt for AI analysis, returns system prompt and user prompt"""
-    answers_json = json.dumps(answers, ensure_ascii=False, indent=2)
+    # Build detailed responses including question text and selected option content
+    responses_detailed = []
+    for q in QUESTIONS:
+        qid = q["id"]
+        selected_key = answers.get(qid)
+        selected_text = None
+        if selected_key is not None:
+            selected_text = q["options"].get(selected_key)
+        options_list = [{"key": k, "text": v} for k, v in q["options"].items()]
+        responses_detailed.append({
+            "id": qid,
+            "text": q["text"],
+            "selected": {"key": selected_key, "text": selected_text},
+            "options": options_list
+        })
+    responses_json = json.dumps(responses_detailed, ensure_ascii=False, indent=2)
     
     system_prompt = """You are a senior AI strategy consultant and course teaching assistant with deep understanding of the builder mindset and the five-stage AI collaboration framework.
 
@@ -183,13 +198,13 @@ Stage Four: Project Manager. Solving large task failures caused by context satur
 
 Stage Five: Co-creator. Jointly exploring open strategic questions, where human judgment and expertise become the most important context.
 
-# Student Responses
-The student's responses are as follows (JSON format):
-{answers_json}
+# Student Responses (structured)
+    The student's responses are provided as a structured list with each original question, the selected option key and content, and all available options for grounding:
+    {responses_json}
 
 # Report Structure and Instructions
 
-Please generate a Markdown format report containing the following sections:
+Please generate a Markdown format report containing the following sections. When referencing a response, include the question text and the selected option content (do not use bare letters without content). Use the structured responses above as ground truth:
 
 ## Overall Score
 
@@ -294,4 +309,3 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
