@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-AI_BUILDER_BASE_URL = "https://www.ai-builders.com/resources/students-backend"
+AI_BUILDER_BASE_URL = "https://space.ai-builders.com/backend/"
 SERVICE_NAME = "ai-readiness"
 REPO_URL = "https://github.com/grapeot/ai_readiness_survey"
 BRANCH = "master"

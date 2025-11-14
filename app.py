@@ -29,7 +29,7 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # AI Builder API配置
-AI_BUILDER_BASE_URL = "https://www.ai-builders.com/resources/students-backend"
+AI_BUILDER_BASE_URL = "https://space.ai-builders.com/backend/"
 AI_BUILDER_MODEL = "grok-4-fast"
 
 
